@@ -1,0 +1,80 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+  previewFeatures = ["clientExtensions"]
+}
+
+datasource db {
+  provider = "postgresql"
+  // url definida via prisma.config.ts
+}
+
+model Filial {
+  id            Int      @id @default(autoincrement())
+  nome          String
+  endereco      String
+  telefone      String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  pedidos       Pedido[]
+  filialFornecedores FilialFornecedor[]
+}
+
+model Fornecedor {
+  id            Int      @id @default(autoincrement())
+  nome          String
+  contato       String?
+  email         String?
+  telefone      String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  filialFornecedores FilialFornecedor[]
+}
+
+model FilialFornecedor {
+  filialId      Int
+  fornecedorId  Int
+
+  filial        Filial     @relation(fields: [filialId], references: [id])
+  fornecedor    Fornecedor @relation(fields: [fornecedorId], references: [id])
+
+  @@id([filialId, fornecedorId])
+}
+
+model Produto {
+  id            Int      @id @default(autoincrement())
+  nome          String
+  descricao     String?
+  preco         Float
+  categoria     String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  pedidos       PedidoProduto[]
+}
+
+model Pedido {
+  id            Int      @id @default(autoincrement())
+  filialId      Int
+  dataPedido    DateTime @default(now())
+  status        String   @default("pendente")
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  filial        Filial          @relation(fields: [filialId], references: [id])
+  itens         PedidoProduto[]
+}
+
+model PedidoProduto {
+  pedidoId      Int
+  produtoId     Int
+  quantidade    Int      @default(1)
+  precoUnitario Float
+
+  pedido        Pedido  @relation(fields: [pedidoId], references: [id])
+  produto       Produto @relation(fields: [produtoId], references: [id])
+
+  @@id([pedidoId, produtoId])
+}
