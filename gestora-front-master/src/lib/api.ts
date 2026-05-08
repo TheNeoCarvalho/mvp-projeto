@@ -17,41 +17,40 @@ async function fetchAPI<T>(endpoint: string, options?: RequestInit): Promise<T> 
 }
 
 export interface Filial {
-  id: string;
+  id: number;
   nome: string;
   endereco: string;
   telefone: string;
-  createdAt?: string;
-  updatedAt?: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface Fornecedor {
-  id: string;
+  id: number;
   nome: string;
-  contato?: string;
+  contato: string;
   email: string;
   telefone: string;
-  createdAt?: string;
-  updatedAt?: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface Produto {
-  id: string;
+  id: number;
   nome: string;
-  descricao?: string;
+  descricao: string;
   preco: number;
-  categoria?: string;
-  createdAt?: string;
-  updatedAt?: string;
+  categoria: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface Pedido {
-  id: string;
-  filialId: string;
+  id: number;
+  filialId: number;
   status: string;
-  itens?: any[];
-  createdAt?: string;
-  updatedAt?: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface PaginationMeta {
@@ -72,12 +71,12 @@ export const api = {
       const query = new URLSearchParams(params as any).toString();
       return fetchAPI<ApiResponse<Filial>>(`/filiais?${query}`);
     },
-    getById: (id: string) => fetchAPI<Filial>(`/filiais/${id}`),
+    getById: (id: number) => fetchAPI<Filial>(`/filiais/${id}`),
     create: (data: Partial<Filial>) =>
       fetchAPI<Filial>("/filiais", { method: "POST", body: JSON.stringify(data) }),
-    update: (id: string, data: Partial<Filial>) =>
+    update: (id: number, data: Partial<Filial>) =>
       fetchAPI<Filial>(`/filiais/${id}`, { method: "PUT", body: JSON.stringify(data) }),
-    delete: (id: string) =>
+    delete: (id: number) =>
       fetchAPI<void>(`/filiais/${id}`, { method: "DELETE" }),
   },
 
@@ -86,12 +85,12 @@ export const api = {
       const query = new URLSearchParams(params as any).toString();
       return fetchAPI<ApiResponse<Fornecedor>>(`/fornecedores?${query}`);
     },
-    getById: (id: string) => fetchAPI<Fornecedor>(`/fornecedores/${id}`),
+    getById: (id: number) => fetchAPI<Fornecedor>(`/fornecedores/${id}`),
     create: (data: Partial<Fornecedor>) =>
       fetchAPI<Fornecedor>("/fornecedores", { method: "POST", body: JSON.stringify(data) }),
-    update: (id: string, data: Partial<Fornecedor>) =>
+    update: (id: number, data: Partial<Fornecedor>) =>
       fetchAPI<Fornecedor>(`/fornecedores/${id}`, { method: "PUT", body: JSON.stringify(data) }),
-    delete: (id: string) =>
+    delete: (id: number) =>
       fetchAPI<void>(`/fornecedores/${id}`, { method: "DELETE" }),
   },
 
@@ -110,16 +109,16 @@ export const api = {
   },
 
   pedidos: {
-    getAll: (params?: { filialId?: string; status?: string; page?: number; limit?: number }) => {
+    getAll: (params?: { filialId?: number; status?: string; page?: number; limit?: number }) => {
       const query = new URLSearchParams(params as any).toString();
       return fetchAPI<ApiResponse<Pedido>>(`/pedidos?${query}`);
     },
-    getById: (id: string) => fetchAPI<Pedido>(`/pedidos/${id}`),
+    getById: (id: number) => fetchAPI<Pedido>(`/pedidos/${id}`),
     create: (data: Partial<Pedido>) =>
       fetchAPI<Pedido>("/pedidos", { method: "POST", body: JSON.stringify(data) }),
-    updateStatus: (id: string, status: string) =>
+    updateStatus: (id: number, status: string) =>
       fetchAPI<Pedido>(`/pedidos/${id}/status`, { method: "PATCH", body: JSON.stringify({ status }) }),
-    delete: (id: string) =>
+    delete: (id: number) =>
       fetchAPI<void>(`/pedidos/${id}`, { method: "DELETE" }),
   },
 };

@@ -5,11 +5,14 @@ import { paginatedResponse } from "../utils/pagination.js"
 import AppError from "../utils/AppError.js"
 
 export const listar = asyncHandler(async (req: Request, res: Response) => {
-  const { page, limit, filialId, status } = req.query as any
+  const page = Number(req.query.page) || 1
+  const limit = Number(req.query.limit) || 20
+  const filialId = req.query.filialId ? Number(req.query.filialId) : undefined
+  const status = req.query.status as string | undefined
   const { data, total } = await pedidoService.listar({
     page,
     limit,
-    filialId: filialId ? Number(filialId) : undefined,
+    filialId,
     status,
   })
   res.json(paginatedResponse(data, total, { page, limit }))
@@ -37,5 +40,5 @@ export const atualizarStatus = asyncHandler(async (req: Request, res: Response) 
 export const remover = asyncHandler(async (req: Request, res: Response) => {
   const id = Number(req.params.id)
   await pedidoService.remover(id)
-  res.status(204).end()
+  res.json({ message: "Pedido excluído com sucesso" })
 })

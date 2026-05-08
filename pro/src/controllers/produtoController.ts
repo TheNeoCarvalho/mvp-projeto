@@ -5,7 +5,10 @@ import { paginatedResponse } from "../utils/pagination.js"
 import AppError from "../utils/AppError.js"
 
 export const listar = asyncHandler(async (req: Request, res: Response) => {
-  const { page, limit, nome, categoria } = req.query as any
+  const page = Number(req.query.page) || 1
+  const limit = Number(req.query.limit) || 20
+  const nome = req.query.nome as string | undefined
+  const categoria = req.query.categoria as string | undefined
   const { data, total } = await produtoService.listar({ page, limit, nome, categoria })
   res.json(paginatedResponse(data, total, { page, limit }))
 })

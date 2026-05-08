@@ -5,7 +5,9 @@ import { paginatedResponse } from "../utils/pagination.js"
 import AppError from "../utils/AppError.js"
 
 export const listar = asyncHandler(async (req: Request, res: Response) => {
-  const { page, limit, nome } = req.query as any
+  const page = Number(req.query.page) || 1
+  const limit = Number(req.query.limit) || 20
+  const nome = req.query.nome as string | undefined
   const { data, total } = await fornecedorService.listar({ page, limit, nome })
   res.json(paginatedResponse(data, total, { page, limit }))
 })
@@ -31,5 +33,5 @@ export const atualizar = asyncHandler(async (req: Request, res: Response) => {
 export const remover = asyncHandler(async (req: Request, res: Response) => {
   const id = Number(req.params.id)
   await fornecedorService.remover(id)
-  res.status(204).end()
+  res.json({ message: "Fornecedor excluído com sucesso" })
 })

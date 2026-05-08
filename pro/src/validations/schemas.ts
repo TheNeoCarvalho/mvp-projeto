@@ -34,11 +34,13 @@ export const pedidoItemSchema = z.object({
 
 export const pedidoSchema = z.object({
   filialId: z.number().int().positive("Filial é obrigatória"),
-  itens: z.array(pedidoItemSchema).min(1, "Pedido deve ter pelo menos 1 item"),
+  itens: z.array(pedidoItemSchema).min(1, "Pedido deve ter pelo menos 1 item").optional(),
 })
 
 export const statusSchema = z.object({
-  status: z.enum(["pendente", "confirmado", "preparando", "entregue", "cancelado"]),
+  status: z.enum(["PENDENTE", "CONFIRMADO", "PREPARANDO", "ENTREGUE", "CANCELADO", "pendente", "confirmado", "preparando", "entregue", "cancelado"], {
+    message: "Status inválido"
+  }),
 })
 
 export const filialFornecedorSchema = z.object({

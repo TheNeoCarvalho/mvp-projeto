@@ -29,19 +29,20 @@ export async function buscarPorId(id: number) {
 
 export async function criar(data: {
   filialId: number
-  itens: { produtoId: number; quantidade: number; precoUnitario: number }[]
+  itens?: { produtoId: number; quantidade: number; precoUnitario: number }[]
 }) {
   const { filialId, itens } = data
   return prisma.pedido.create({
     data: {
       filialId,
-      itens: { create: itens },
+      status: "PENDENTE",
+      ...(itens && itens.length > 0 && { itens: { create: itens } }),
     },
   })
 }
 
 export async function atualizarStatus(id: number, status: string) {
-  return prisma.pedido.update({ where: { id }, data: { status } })
+  return prisma.pedido.update({ where: { id }, data: { status: status.toUpperCase() } })
 }
 
 export async function remover(id: number) {
